@@ -12,4 +12,4 @@
 
 |                          [모던 자바스크립트 Deep Dive](https://github.com/leedawnn/javascript-deep-dive)                          |
 | :-------------------------------------------------------------------------------------------------------------------------------: |
-| <a href="https://github.com/leedawnn/javascript-deep-dive"><img src="images/js-deep-dive.jpeg" width="300px" height="300px"/></a> |
+| <a href="https://github.com/leedawnn/javascript-deep-dive"><img src="images/js-deep-dive.jpeg" width="250px" height="300px"/></a> |
