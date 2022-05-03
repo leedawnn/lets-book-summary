@@ -6,7 +6,7 @@
 
 디자인 패턴이란 프로그램을 설계할 때 발생했던 문제점들을 객체 간의 상호 관계 등을 이용하여 해결할 수 있도록 하나의 '규약' 형태로 만들어 놓은 것을 의미한다.
 
-#### 싱글톤 패턴
+### 싱글톤 패턴
 
 싱글톤 패턴(singleton pattern)은 하나의 클래스에 오직 하나의 인스턴스만 가지는 패턴이다. 보통 데이터베이스 연결 모듈에 많이 사용한다.
 
@@ -115,3 +115,74 @@ console.log(a === b); // true
 의존성 주입은 다음과 같은 의존성 주입 원칙을 지키며 만들어야한다.
 
 - 상위 모듈은 하위 모듈에서 어떠한 것도 가져오지 않아야 한다. 둘 다 추상화에 의존해야 하며, 이 때 추상화는 세부 사항에 의존하지 말아야한다.
+
+### 팩토리 패턴
+
+팩토리 패턴(factory pattern)은 객체를 사용하는 코드에서 객체 생성 부분을 떼어내 추상화한 패턴이자 상속 관계에 있는 두 클래스에서 상위 클래스가 중요한 뼈대를 결정하고, 하위 클래스에서 객체 생성에 관한 구체적인 내용을 결정하는 패턴이다.
+
+상위클래스와 하위 클래스가 분리되기 때문에 느슨한 결합을 가지며 상위 클래스에서는 인스턴스 생성 방식에 대해 전혀 알 필요가 없기 때문에 더 많은 유연성을 갖게된다.
+그리고 객체 생성 로직이 따로 떼어져 있기 때문에 코드를 리팩터링하더라도 한 곳만 고칠 수 있게 되니 유지 보수성이 증가된다.
+
+#### 자바스크립트의 팩토리 패턴
+
+자바스크립트에서 팩토리 패턴을 구현한다면 간단하게 new Object()로 구현할 수 있다.
+
+```javascript
+const num = new Object(42)
+const str = new Object('abc)
+
+num.constructor.name; // Number
+str.constructor.name; // String
+```
+
+숫자를 전달하거나 문자열을 전달함에 따라 다른 타입의 객체를 생성하는 것을 볼 수 있다. 즉, 전달받은 값에 따라 다른 객체를 생성하며 인스턴스의 타입 등을 정한다.
+
+```javascript
+class Latte {
+  constructor() {
+    this.name = 'Latte';
+  }
+}
+
+class Espresso {
+  constructor() {
+    this.name = 'Espresso';
+  }
+}
+
+class LatteFactory {
+  static createCoffee() {
+    return new Latte();
+  }
+}
+
+class EspressoFactory {
+  static createCoffee() {
+    return new Espresso();
+  }
+}
+
+const factoryList = { LatteFactory, EspressoFactory };
+
+class CoffeeFactory {
+  static createCoffee(type) {
+    const factory = factoryList[type];
+    return factory.createCoffee();
+  }
+}
+
+const main = () => {
+  // 라떼를 주문한다.
+  const coffee = coffeeFactory.createCoffee('LatteFactory');
+  // 커피 이름을 부른다.
+  console.log(coffee.name); // Latte
+};
+
+main();
+```
+
+CoffeeFactory라는 상위 클래스가 중요한 뼈대를 결정하고 하위 클래스인 LateeFactory가 구체적인 내용을 결정한다.
+
+이것은 의존성 주입이라고도 볼 수 있다. CoffeeFactory의 인스턴스를 생성하는 것이 아닌 LatteFactory에서 생성한 인스턴스를 CoffeeFactory에 주입하고 있기 때문이다.
+
+그리고 CoffeeFactory에서 static으로 createCoffee() 정적 메서드를 정의했는데, 정적 메서드를 쓰면 클래스의 인스턴스 없이 호출이 가능하여 메모리를 절약할 수 있고 개별 인스턴스에 묶이지 않으며 클래스 내의 함수를 정의할 수 있는 장점이 있다.
