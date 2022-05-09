@@ -181,8 +181,44 @@ const main = () => {
 main();
 ```
 
-CoffeeFactory라는 상위 클래스가 중요한 뼈대를 결정하고 하위 클래스인 LateeFactory가 구체적인 내용을 결정한다.
+CoffeeFactory라는 상위 클래스가 중요한 뼈대를 결정하고 하위 클래스인 LatteFactory가 구체적인 내용을 결정한다.
 
 이것은 의존성 주입이라고도 볼 수 있다. CoffeeFactory의 인스턴스를 생성하는 것이 아닌 LatteFactory에서 생성한 인스턴스를 CoffeeFactory에 주입하고 있기 때문이다.
 
 그리고 CoffeeFactory에서 static으로 createCoffee() 정적 메서드를 정의했는데, 정적 메서드를 쓰면 클래스의 인스턴스 없이 호출이 가능하여 메모리를 절약할 수 있고 개별 인스턴스에 묶이지 않으며 클래스 내의 함수를 정의할 수 있는 장점이 있다.
+
+### 전략 패턴
+
+전략 패턴(strategy pattern)은 정책 패턴이라고도 하며, 객체의 행위를 바꾸고 싶은 경우 '직접' 수정하지 않고 전략이라고 부르는 '캡슐화한 알고리즘'을 컨텍스트 안에서 바꿔주면서 상호 교체가 가능하게 만드는 패턴이다.
+
+예를 들면, 우리가 어떤 것을 살 때 네이버페이, 카카오페이 등 다양한 방법으로 결제하듯이 어떤 아이템을 살 때 LUNACard로 결제하거나 KAKAOCard로 결제하는 것이 있겠다. 결제 방식의 '전략'만 바꿔서 두 가지 방식으로 결제하는 것이다.
+
+#### passport의 전략 패턴
+
+전략 패턴을 활용한 라이브러리로는 passport가 있다.
+
+passport는 Node.js에서 인증 모듈을 구현할 때 쓰는 미들웨어 라이브러리로, 여러 가지 '전략'을 기반으로 인증할 수 있게 한다. 서비스 내의 회원가입된 아이디와 비밀번호를 기반으로 인증하는 LocalStrategy 전략과 페이스북, 네이버 등 다른 서비스를 기반으로 인증하는 OAuth 전략 등을 지원한다.
+
+```javascript
+var passport = require('passport'),
+  LocalStrategy = require('passport-local').Strategy;
+
+passport.use(
+  new LocalStrategy(function (username, password, done) {
+    User.findOne({ username: username }, function (err, user) {
+      if (err) {
+        return done(err);
+      }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
+    });
+  })
+);
+```
+
+`passport.use(new LocalStrategy(...))` 처럼 `passport.use()`라는 메서드에 **전략**을 매개 변수로 넣어서 로직을 수행하는 것을 볼 수 있다.
