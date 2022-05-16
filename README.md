@@ -13,3 +13,9 @@
 |                          [모던 자바스크립트 Deep Dive](https://github.com/leedawnn/javascript-deep-dive)                          |
 | :-------------------------------------------------------------------------------------------------------------------------------: |
 | <a href="https://github.com/leedawnn/javascript-deep-dive"><img src="images/js-deep-dive.jpeg" width="250px" height="300px"/></a> |
+
+
+### 💫 회고
+
+- [모던 자바스크립트 deep dive 스터디 회고](https://leedawnn.github.io/js-deep-dive-study/)
+
